@@ -35,4 +35,12 @@ describe('Band API', () => {
             });
     });
 
+    it('GET 404 - by ID', () => {
+        return request.get('/bands/badIdGoesHere')
+            .then(response => {
+                assert.equal(response.status, 404);
+                assert.match(response.body.error, /^Band id/);
+            });
+    });
+
 });
