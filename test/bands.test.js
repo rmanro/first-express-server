@@ -49,12 +49,30 @@ describe('Band API', () => {
             });
     });
 
+    it('GET - all bands', () => {
+        return request.get('/bands')
+            .then(({ body }) => {
+                assert.deepEqual(body, [band1, band2]);
+            });
+    });
+    
+    it('DELETE - band by ID', () => {
+        return request.delete(`/bands/${band1._id}`)
+            .then(() => {
+                return Band.findById(band1._id);
+            })
+            .then(found => {
+                assert.isUndefined(found);
+            });
+    });
+
     it('GET 404 - by ID', () => {
-        return request.get('/bands/badIdGoesHere')
+        return request.get(`/bands/${band1._id}`)
             .then(response => {
                 assert.equal(response.status, 404);
                 assert.match(response.body.error, /^Band id/);
             });
     });
+
 
 });
