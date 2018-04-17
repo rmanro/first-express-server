@@ -35,6 +35,20 @@ describe('Band API', () => {
             });
     });
 
+    it('PUT - update a band', () => {
+        band1.city = 'Calgary, Canada';
+
+        return request.put(`/bands/${band1._id}`)
+            .send(band1)
+            .then(({ body }) => {
+                assert.deepEqual(body, band1);
+                return Band.findById(band1._id);
+            })
+            .then(updated => {
+                assert.deepEqual(updated, band1);
+            });
+    });
+
     it('GET 404 - by ID', () => {
         return request.get('/bands/badIdGoesHere')
             .then(response => {
